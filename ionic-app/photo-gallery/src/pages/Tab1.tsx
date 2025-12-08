@@ -54,7 +54,7 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList id="thing-list">
-          <IonListHeader>Product List</IonListHeader>
+          <IonListHeader>Products ({dataset.length})</IonListHeader>
           {dataset.map((item, index) => (
             <IonItem lines="inset" key={index}>
               <IonLabel>
