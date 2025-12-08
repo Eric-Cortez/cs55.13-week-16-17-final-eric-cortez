@@ -1,22 +1,57 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab3.css';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import "./Tab3.css";
+import { useEffect, useState } from "react";
 
 const Tab3: React.FC = () => {
+  const [dataset, setDataset] = useState<any[]>([]);
+
+  const dataURL =
+    "https://dev-srjc-fall-2025-cs-55-13.pantheonsite.io/wp-json/wp/v2/product_order";
+
+  useEffect(() => {
+    fetch(dataURL)
+      .then((response) => response.json())
+      .then((data) => setDataset(data));
+  }, []);
+  console.log(dataset);
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 3</IonTitle>
+          <IonTitle>Orders</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 3</IonTitle>
+            <IonTitle size="large">Orders</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 3 page" />
+
+        <IonList id="thing-list">
+          <IonListHeader>Orders List</IonListHeader>
+          {dataset.map((item, index) => (
+            <IonItem lines="inset" key={index}>
+              <IonLabel>
+                <h4>Order #: {item.acf.order_number}</h4>
+                <p>Item: {item.acf.item_name}</p>
+                <p>Total: {item.acf.price}</p>
+                <p>count: {item.acf.count}</p>
+              </IonLabel>
+            </IonItem>
+          ))}
+        </IonList>
       </IonContent>
     </IonPage>
   );

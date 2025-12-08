@@ -24,7 +24,6 @@ const Tab1: React.FC = () => {
       .then((response) => response.json())
       .then((data) => setDataset(data));
   }, []);
-  console.log(dataset[0]);
 
   return (
     <IonPage>
@@ -36,7 +35,7 @@ const Tab1: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">List</IonTitle>
+            <IonTitle size="large">Products</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonList id="thing-list">
