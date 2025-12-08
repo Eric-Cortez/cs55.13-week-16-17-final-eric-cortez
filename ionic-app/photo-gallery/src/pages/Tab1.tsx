@@ -22,7 +22,22 @@ const Tab1: React.FC = () => {
   useEffect(() => {
     fetch(dataURL)
       .then((response) => response.json())
-      .then((data) => setDataset(data));
+      .then(async (products) => {
+        const productsWithImages = await Promise.all(
+          products.map(async (product: any) => {
+            if (product._links && product._links["wp:attachment"]) {
+              const mediaUrl = product._links["wp:attachment"][0].href;
+              const mediaResponse = await fetch(mediaUrl);
+              const mediaData = await mediaResponse.json();
+              if (mediaData.length > 0 && mediaData[0].source_url) {
+                return { ...product, image: mediaData[0].source_url };
+              }
+            }
+            return product;
+          })
+        );
+        setDataset(productsWithImages);
+      });
   }, []);
 
   return (
@@ -47,6 +62,9 @@ const Tab1: React.FC = () => {
                 <p>{item.acf.description}</p>
                 <p>SKU: {item.acf.sku}</p>
                 <p>Price: {item.acf.price}</p>
+                {item.image && (
+                  <img src={item.image} alt={item.acf.product_name} className="product-img"/>
+                )}
               </IonLabel>
             </IonItem>
           ))}
