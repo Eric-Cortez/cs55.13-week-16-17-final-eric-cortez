@@ -40,13 +40,19 @@ const Tab3: React.FC = () => {
         </IonHeader>
 
         <IonList id="thing-list">
-          <IonListHeader>Orders List</IonListHeader>
+          <IonListHeader>Orders ({dataset.length})</IonListHeader>
           {dataset.map((item, index) => (
             <IonItem lines="inset" key={index}>
               <IonLabel>
                 <h4>Order #: {item.acf.order_number}</h4>
                 <p>Item: {item.acf.item_name}</p>
-                <p>Total: {item.acf.price}</p>
+                <p>
+                  Total: $
+                  {(
+                    parseFloat((item.acf.price || "0").replace("$", "")) *
+                    1.0825
+                  ).toFixed(2)}
+                </p>
                 <p>count: {item.acf.count}</p>
               </IonLabel>
             </IonItem>
