@@ -58,13 +58,17 @@ const Tab1: React.FC = () => {
           {dataset.map((item, index) => (
             <IonItem lines="inset" key={index}>
               <IonLabel>
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.acf.product_name}
+                    className="product-img"
+                  />
+                )}
                 <h4>{item.acf.product_name}</h4>
                 <p>{item.acf.description}</p>
                 <p>SKU: {item.acf.sku}</p>
                 <p>Price: {item.acf.price}</p>
-                {item.image && (
-                  <img src={item.image} alt={item.acf.product_name} className="product-img"/>
-                )}
               </IonLabel>
             </IonItem>
           ))}
