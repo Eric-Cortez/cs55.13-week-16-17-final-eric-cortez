@@ -17,7 +17,7 @@ const Tab1: React.FC = () => {
   const [dataset, setDataset] = useState<any[]>([]);
 
   const dataURL =
-    "https://dev-srjc-fall-2025-cs-55-13.pantheonsite.io/wp-json/wp/v2/product";
+    "https://dev-srjc-fall-2025-cs-55-13.pantheonsite.io/wp-json/wp/v2/product?acf_format=standard";
 
   useEffect(() => {
     fetch(dataURL)
@@ -25,13 +25,8 @@ const Tab1: React.FC = () => {
       .then(async (products) => {
         const productsWithImages = await Promise.all(
           products.map(async (product: any) => {
-            if (product._links && product._links["wp:attachment"]) {
-              const mediaUrl = product._links["wp:attachment"][0].href;
-              const mediaResponse = await fetch(mediaUrl);
-              const mediaData = await mediaResponse.json();
-              if (mediaData.length > 0 && mediaData[0].source_url) {
-                return { ...product, image: mediaData[0].source_url };
-              }
+            if (product.acf.image) {
+              return { ...product, image: product.acf.image };
             }
             return product;
           })

@@ -17,14 +17,24 @@ const Tab3: React.FC = () => {
   const [dataset, setDataset] = useState<any[]>([]);
 
   const dataURL =
-    "https://dev-srjc-fall-2025-cs-55-13.pantheonsite.io/wp-json/wp/v2/product_order";
+    "https://dev-srjc-fall-2025-cs-55-13.pantheonsite.io/wp-json/wp/v2/product_order?acf_format=standard";
 
   useEffect(() => {
     fetch(dataURL)
       .then((response) => response.json())
-      .then((data) => setDataset(data));
+      .then(async (orders) => {
+        const ordersWithImages = await Promise.all(
+          orders.map(async (order: any) => {
+            if (order.acf.image) {
+              return { ...order, image: order.acf.image };
+            }
+            return order;
+          })
+        );
+        setDataset(ordersWithImages);
+      });
   }, []);
-  console.log(dataset);
+
   return (
     <IonPage>
       <IonHeader>
@@ -44,6 +54,13 @@ const Tab3: React.FC = () => {
           {dataset.map((item, index) => (
             <IonItem lines="inset" key={index}>
               <IonLabel>
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.acf.product_name}
+                    className="product-img"
+                  />
+                )}
                 <h4>Order #: {item.acf.order_number}</h4>
                 <p>Item: {item.acf.item_name}</p>
                 <p>
